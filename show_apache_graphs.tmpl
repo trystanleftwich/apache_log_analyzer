@@ -1,0 +1,145 @@
+<html>
+  <head>
+    <title>Stacked Column Chart</title>
+    <script type="text/javascript" src="http://protovis-js.googlecode.com/svn/trunk/protovis-d3.1.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript+protovis">
+        function buildGraph(theData, ducksauce,scale) {
+            var data = theData
+            w = 1600,
+            h = 800,
+            x = pv.Scale.ordinal(pv.range(theData.length)).splitBanded(0, w, 4/5),
+            y = pv.Scale.linear(0, scale).range(0, h);
+        
+            var vis = new pv.Panel()
+                .width(w)
+                .height(h)
+                .bottom(20)
+                .left(50)
+                .right(5)
+                .top(5);
+            
+            var bar = vis.add(pv.Bar)
+                .data(data)
+                .left(function() x(this.index))
+                .width(x.range().band)
+                .bottom(0)
+                .height(y);
+            
+            bar.anchor("top").add(pv.Label)
+                .textAlign("left")
+                .textBaseline("middle")
+                .textStyle("black")
+                .textAngle(-Math.PI / 2)
+                .text(function(d) d.toFixed(1));
+
+            
+            bar.anchor("bottom").add(pv.Label)
+                .textMargin(5)
+                .textAlign("left")
+                .textBaseline("middle")
+                .textStyle("white")
+                .textAngle(-Math.PI / 2)
+                .text(function() ducksauce[this.index]);
+                //.text(function() ['04/02/2011', '04/07/2011', '04/04/2011', '04/09/2011', '03/31/2011', 'day-None', '04/01/2011', '04/06/2011', '04/03/2011', '04/08/2011', '04/05/2011'][this.index]);
+            
+            vis.add(pv.Rule)
+                .data(y.ticks())
+                .bottom(function(d) Math.round(y(d)) - .5)
+                .strokeStyle(function(d) d ? "rgba(255,255,255,.3)" : "#000")
+              .add(pv.Rule)
+                .left(0)
+                .width(5)
+                .strokeStyle("#000")
+              .anchor("left").add(pv.Label)
+                .textMargin(5)
+                .textAlign("right")
+                .text(function(d) d.toFixed(1));
+            
+            vis.render();
+        }
+            </script>
+    <style>
+        td { padding: 5px 5px 5px;
+   border-color: #FFFFFF;
+    border-width: 0 1px 0 0;
+    border-style: solid;
+    margin: 0;
+    padding: 4px;
+
+           }
+  th {
+   border-color: #FFFFFF;
+    border-width: 0 1px 0 0;
+    border-style: solid;
+    margin: 0;
+    padding: 4px;
+}
+       
+        table {
+               font-size:12px;
+               text-align:center;
+
+              }
+
+    tr.row1 { background-color:DDDDDD;}
+    tr.row2 {background-color:EEEEEE;}
+    </style>
+    <div style="float:centre;">
+    #for $type in $types
+    <p style="padding-left:50px"> Graph for $type[0] </p>
+    <script type="text/javascript+protovis">
+    var data = $type[1][1]
+    var ducksauce = $type[1][0]
+    var scale = Math.max.apply(Math, data)*1.1;
+
+    buildGraph(data,ducksauce,scale)
+    </script>
+    </div>
+    #end for
+<!--
+    <p style="padding-left:50px"> Apache hits for April </p>
+    <p style="padding-left:50px"> Total hits = 3,051,842,893 </p>
+    </div>
+
+    <div style="float:centre;">
+    <script type="text/javascript+protovis">
+    //var data = [[70.65,66.43,69.15],[20.05,21.57,20.00],[9.30, 12.0,10.85]]    
+    //var data = [2981985116, 22031324, 20628142, 15878320, 8973486, 1240624, 419000, 401459, 154069, 63865];
+    //var ducksauce = ['/ping.js', '/server-status/', '/offer/', 'URL-None', '/HM/prod-ping.ping', '/server-status', '/heartbeat.js', '/heartbeat.gif', '/ping/health/', '/ping.j'];
+    //var scale = 3100000000;
+
+
+    buildGraph(data,ducksauce,scale)
+    </script>
+
+    <p style="padding-left:50px"> Apache hits for April </p>
+    <p style="padding-left:50px"> top 10 URL's</p>
+    </div>
+
+
+ 
+    <div style="float:left; padding-left:30px;">
+    <script type="text/javascript+protovis">
+    var data = [[69.43,30.59,28.10],[16.82,42.85,45.45],[13.75,26.56,26.45]]
+    buildGraph(data)
+    </script>
+    <p style="padding-left:50px;"> Toys R Us </p>
+    <table>
+      <tr style="background-color:#BBB;padding: 5px 5px 5px 5px;">
+        <th style="background-color:#FFF;"></th><th>Offers</th><th>Accepts</th><th>Completes</th><th>% Offers to Accepts</th><th>% Accetps to completes</th>
+       <tr class="row1"><th>IE</th><td>44379</td><td style="align:centre">197</td><td>102</td><td>0.44%</td><td>51.78%</td></tr>
+       <tr class="row2"><th>FF</th><td>10752</td><td>276</td><td>165</td><td>2.57%</td><td>59.78%</td></tr>
+       <tr class="row1"><th>Other</th><td>8785</td><td>171</td><td>96</td><td>1.95%</td><td>56.14%</td></tr>
+       <tr class="row2"><th>Total</th><td>63916</td><td>644</td><td>363</td><td>1.01%</td><td>56.37%</td></tr>
+      </table>
+
+    </div>
+<p><span style="padding:40">Canadian Tire</span> <span style="padding:60">Toys R Us</span></p>-->
+
+
+  </body>
+
+</html>
+
